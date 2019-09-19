@@ -1,0 +1,148 @@
+<html>
+
+<head>
+    <title>Story Telling</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1.0' />
+</head>
+
+<body>
+    <img src='ea.jpeg' alt='Sorry, the image not avaiable' id='toDisp' />
+    <dialog id='dia' open></dialog>
+    <button id="prev" style='float:left'>Previous</button>
+    <button id="next" style='float:right'>Next</button>
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        #toDisp {
+            width: 100%;
+            height: 80%;
+        }
+
+        #dia {
+            width: 100%;
+            height: auto;
+            border: 1px solid rgba(0, 0, 0, 0.788);
+            margin-top: 25px;
+            text-align: center;
+            font-size: 25px;
+            font-family: sans-serif;
+            animation: show 1s linear;
+            background-color: rgba(0, 0, 0, 0.788);
+            color: white;
+        }
+
+        @keyframes show {
+            from {
+                margin-top: 10px;
+                transform: scale(1.5);
+            }
+
+            to {
+                margin-top: 25px;
+                transform: scale(1.0);
+            }
+        }
+    </style>
+    <script>
+
+        if (!'SpeechSynthesis' in window) {
+            alert('Please upgrade your browser');
+        }
+
+        var dia=document.getElementById('dia');
+        var ele = document.getElementById('toDisp');
+        var prev = document.getElementById('prev');
+        var next = document.getElementById('next');
+        var images = ['ea', 'ea2', 'ea4', 'ea5', 'ea6', 'ea8', 'ea11', 'ea12'];
+        var desc = ['Welcome i want to tell you a story', 
+        'Once upon a time, there lived a large elephant in the jungle. It was magnificent and very arrogant',
+        'There also lived a small ant in the jungle, who was full of determination and self-respect',
+        'One day, the elephant was about to step on the ant, the ant shouted.   Mr elephant, please stop, don’t crush me to death!',
+        'The elephant was annoyed and yelled on the ant, “How dare you come in my way? Get lost!”',
+        'The ant was very upset, she went home crying. The mother ant said, "What happened to my child?" Little ant told everything. Mother ant got very angry, "The elephant must be taught a lesson ", she said.',
+        'The mother ant followed the little ant to the place where the elephant was resting. She quietly climbed inside the trunk of the elephant and started biting. The elephant howled in pain.',
+        'Help! Help!"  The mother ant scolded the elephant, "Do you now realize how it feels to be hurt and humiliated?',
+        'The elephant apologized, "I\'m sorry mother ant, I\'ll never be rude to small creatures.'
+        ];
+
+
+        dia.innerHTML=desc[0];
+        var curPage = 0;
+
+        next.addEventListener('click', function () {
+            curPage++;
+            if (curPage > images.length - 1) {
+                next.style.opacity = '0.6';
+                next.disabled = true;
+                next.style.cursor = 'not-allowed';
+                try{
+                    displayIt();
+                }catch(e){
+                    alert('Hackers!... ah lol');
+                }
+                
+                return;
+            } else {
+                next.style.opacity = '1';
+                next.disabled = false;
+                next.style.cursor = 'pointer';
+            }
+            changeImage(images[curPage]);
+            sayIt(desc[curPage]);
+
+        });
+
+        prev.addEventListener('click', function () {
+            curPage--;
+            if (curPage < 0) {
+                next.style.opacity = '0.6';
+                next.disabled = true;
+                next.style.cursor = 'not-allowed';
+                return;
+            } else {
+                next.style.opacity = '1';
+                next.disabled = false;
+                next.style.cursor = 'pointer';
+            }
+
+            changeImage(images[curPage]);
+            sayIt(desc[curPage]);
+        });
+
+        function changeImage(uri) {
+
+            ele.src = uri + '.jpeg';
+
+        }
+
+
+        function sayIt(about){
+            var msg=new SpeechSynthesisUtterance(about);
+
+            if(window.speechSynthesis.speaking){
+                window.speechSynthesis.cancel();
+            }
+
+
+            window.speechSynthesis.speak(msg);
+
+            dia.innerHTML=about;
+
+        }
+        
+        function displayIt(){
+            var toPrint='<h1>Credits: ADARSH N BIDARI</h1>';
+            var nPage=window.open('');
+            nPage.document.write(toPrint);
+        }
+
+
+
+    </script>
+</body>
+
+</html>
